@@ -1,42 +1,25 @@
-import Navbar from './components/Navbar';
-import StatCard from './components/StatCard';
-import FormFacility from './forms/FormFacility';
-import FormBooking from './forms/FormBooking';
-import FormUser from './forms/FormUser';
-import FormAnnouncement from './forms/FormAnnouncement';
-import { Building, CalendarCheck, Users, Megaphone } from 'lucide-react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from "./components/Navbar";
+import FormFacility from "./forms/FormFacility";
+import FormBooking from "./forms/FormBooking";
+import FormUser from "./forms/FormUser";
+import FormAnnouncement from "./forms/FormAnnouncement";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
+    <div className="min-h-screen bg-slate-950 text-slate-200 pb-12 overflow-x-hidden selection:bg-cyan-500/30">
+      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none" />
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-4 space-y-8">
-        {}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard title="Facilities" count="12 Total" icon={Building} color="bg-blue-600" />
-          <StatCard title="Bookings" count="28 Active" icon={CalendarCheck} color="bg-emerald-600" />
-          <StatCard title="Users" count="45 Registered" icon={Users} color="bg-purple-600" />
-          <StatCard title="Announcements" count="5 Published" icon={Megaphone} color="bg-amber-600" />
-        </div>
-
-        {}
-        <div>
-          <h2 className="text-lg font-bold text-slate-700 mb-3">Primary Entities (Completed)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormFacility />
-            <FormBooking />
-          </div>
-        </div>
-
-        {}
-        <div>
-          <h2 className="text-lg font-bold text-slate-700 mb-3">Secondary Entities (Base Scaffolds)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormUser />
-            <FormAnnouncement />
-          </div>
-        </div>
+      <main className="relative max-w-3xl mx-auto px-4 mt-8 z-10">
+        <Routes>
+          <Route path="/" element={<Navigate to="/users" replace />} />
+          <Route path="/users" element={<FormUser />} />
+          <Route path="/announcements" element={<FormAnnouncement />} />
+          <Route path="/facilities" element={<FormFacility />} />
+          <Route path="/bookings" element={<FormBooking />} />
+        </Routes>
       </main>
     </div>
   );
