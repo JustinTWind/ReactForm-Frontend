@@ -67,22 +67,10 @@ export default function FormUser() {
   };
 
   const inputClass = (fieldName) =>
-    `w-full p-2.5 text-sm rounded-lg outline-none transition-all duration-300
-     bg-slate-900/60 text-slate-100 placeholder-slate-500
-     border ${
-       errors[fieldName]
-         ? "border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)] focus:shadow-[0_0_15px_rgba(239,68,68,0.5)]"
-         : "border-slate-700/50 focus:border-purple-500 focus:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-     }`;
+    `cyber-input ${errors[fieldName] ? "cyber-input-error" : ""}`;
 
   const selectClass = (fieldName) =>
-    `w-full p-2.5 text-sm rounded-lg outline-none transition-all duration-300
-     bg-slate-900/60 text-slate-100
-     border ${
-       errors[fieldName]
-         ? "border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]"
-         : "border-slate-700/50 focus:border-purple-500 focus:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-     }`;
+    `cyber-input ${errors[fieldName] ? "cyber-input-error" : ""}`;
 
   return (
     <>
@@ -94,23 +82,10 @@ export default function FormUser() {
         />
       )}
 
-      <div
-        className={`relative p-6 rounded-2xl border backdrop-blur-sm transition-all duration-500
-          ${
-            hasErrors
-              ? "bg-red-950/20 border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)]"
-              : "bg-slate-800/40 border-purple-500/20 hover:border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.08)]"
-          }
-        `}
-      >
+      <div className="max-w-xl mx-auto my-8 px-4">
+        <div className={`cyber-card ${hasErrors ? "cyber-card-error" : ""}`}>
         <div
-          className={`absolute top-0 left-4 right-4 h-[2px] rounded-full transition-colors duration-500
-            ${
-              hasErrors
-                ? "bg-gradient-to-r from-transparent via-red-500 to-transparent"
-                : "bg-gradient-to-r from-transparent via-purple-500 to-transparent"
-            }
-          `}
+          className={`cyber-accent ${hasErrors ? "cyber-accent-error" : ""}`}
           style={{
             boxShadow: hasErrors
               ? "0 0 12px rgba(239, 68, 68, 0.6)"
@@ -131,7 +106,7 @@ export default function FormUser() {
         <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
           {/* Username */}
           <div>
-            <label className="block text-xs font-semibold text-purple-300/80 mb-1.5 uppercase tracking-wider">
+            <label className="cyber-label">
               Username
             </label>
             <input
@@ -145,7 +120,7 @@ export default function FormUser() {
               placeholder="johndoe"
             />
             {errors.username && (
-              <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">
+              <p className="cyber-error">
                 ⚠ {errors.username.message}
               </p>
             )}
@@ -153,7 +128,7 @@ export default function FormUser() {
 
           {/* Email */}
           <div>
-            <label className="block text-xs font-semibold text-purple-300/80 mb-1.5 uppercase tracking-wider">
+            <label className="cyber-label">
               Email
             </label>
             <input
@@ -169,7 +144,7 @@ export default function FormUser() {
               placeholder="john@example.com"
             />
             {errors.email && (
-              <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">
+              <p className="cyber-error">
                 ⚠ {errors.email.message}
               </p>
             )}
@@ -177,7 +152,7 @@ export default function FormUser() {
 
           {/* Password */}
           <div>
-            <label className="block text-xs font-semibold text-purple-300/80 mb-1.5 uppercase tracking-wider">
+            <label className="cyber-label">
               Password
             </label>
             <input
@@ -190,7 +165,7 @@ export default function FormUser() {
               placeholder="••••••••"
             />
             {errors.hashedPassword && (
-              <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">
+              <p className="cyber-error">
                 ⚠ {errors.hashedPassword.message}
               </p>
             )}
@@ -199,7 +174,7 @@ export default function FormUser() {
           {/* Full Name & Role in a row */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-purple-300/80 mb-1.5 uppercase tracking-wider">
+              <label className="cyber-label">
                 Full Name
               </label>
               <input
@@ -212,14 +187,14 @@ export default function FormUser() {
                 placeholder="John Doe"
               />
               {errors.fullName && (
-                <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">
+                <p className="cyber-error">
                   ⚠ {errors.fullName.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-purple-300/80 mb-1.5 uppercase tracking-wider">
+              <label className="cyber-label">
                 Role
               </label>
               <select
@@ -231,7 +206,7 @@ export default function FormUser() {
                 <option value="ADMIN">Admin</option>
               </select>
               {errors.role && (
-                <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">
+                <p className="cyber-error">
                   ⚠ {errors.role.message}
                 </p>
               )}
@@ -242,15 +217,7 @@ export default function FormUser() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-lg font-semibold text-sm text-white transition-all duration-300
-              bg-gradient-to-r from-purple-600 to-violet-600
-              hover:from-purple-500 hover:to-violet-500
-              hover:shadow-[0_0_25px_rgba(168,85,247,0.4)]
-              active:scale-[0.98]
-              disabled:opacity-50 disabled:cursor-not-allowed
-              cursor-pointer
-            "
-            style={{ boxShadow: "0 0 15px rgba(168, 85, 247, 0.25)" }}
+            className="cyber-submit"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -261,6 +228,7 @@ export default function FormUser() {
             )}
           </button>
         </form>
+        </div>
       </div>
     </>
   );

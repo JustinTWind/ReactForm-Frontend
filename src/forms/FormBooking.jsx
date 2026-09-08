@@ -1,155 +1,135 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CalendarCheck } from 'lucide-react';
-import { useState } from 'react';
 import Toast from '../components/Toast';
 
 export default function FormBooking() {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    defaultValues: { status: "PENDING" }
+  });
   const [toast, setToast] = useState(null);
 
-  const hasErrors = Object.keys(errors).length > 0;
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-  const onSubmit = (data) => {
-    console.log("✅ [Booking] Model captured:", data);
-    setToast({ type: 'success', message: 'Booking created successfully! 🎉 (Mock)' });
-    reset();
+      if (!response.ok) throw new Error('Could not create booking');
+
+      setToast({ type: "success", message: "Booking created successfully in H2!" });
+      reset();
+    } catch (err) {
+      setToast({ type: "error", message: "Failed to connect to backend server (Port 8080)" });
+    }
   };
-
-  const onError = () => {
-    setToast({ type: 'error', message: 'Please fix the highlighted fields before submitting.' });
-  };
-
-  const inputClass = (fieldName) =>
-    `w-full p-2.5 text-sm rounded-lg outline-none transition-all duration-300
-     bg-slate-900/60 text-slate-100 placeholder-slate-500
-     border ${errors[fieldName]
-      ? 'border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)] focus:shadow-[0_0_15px_rgba(239,68,68,0.5)]'
-      : 'border-slate-700/50 focus:border-emerald-500 focus:shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-    }`;
 
   return (
-    <>
+    <div className="max-w-xl mx-auto my-8 px-4">
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
-
-      <div
-        className={`relative p-6 rounded-2xl border backdrop-blur-sm transition-all duration-500
-          ${hasErrors
-            ? 'bg-red-950/20 border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)]'
-            : 'bg-slate-800/40 border-emerald-500/20 hover:border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.08)]'
-          }
-        `}
-      >
-        <div
-          className={`absolute top-0 left-4 right-4 h-[2px] rounded-full transition-colors duration-500
-            ${hasErrors
-              ? 'bg-gradient-to-r from-transparent via-red-500 to-transparent'
-              : 'bg-gradient-to-r from-transparent via-emerald-500 to-transparent'
-            }
-          `}
-          style={{
-            boxShadow: hasErrors
-              ? '0 0 12px rgba(239, 68, 68, 0.6)'
-              : '0 0 12px rgba(16, 185, 129, 0.6)',
-          }}
-        />
-
-        <div className="flex items-center gap-2.5 mb-5">
-          <div className="p-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30">
-            <CalendarCheck className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+      
+      <div className="relative rounded-2xl bg-[#0B1329]/90 border border-slate-800/80 p-6 shadow-2xl backdrop-blur-xl overflow-hidden before:absolute before:top-0 before:left-0 before:right-0 before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-emerald-400 before:to-transparent">
+        
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <CalendarCheck className="w-5 h-5" />
           </div>
-          <h2 className="font-bold text-lg text-slate-100 tracking-wide">Create Booking</h2>
+          <h2 className="text-lg font-bold text-slate-100 tracking-wide">Create Booking</h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-emerald-300/80 mb-1.5 uppercase tracking-wider">User Email</label>
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                User Email
+              </label>
               <input
                 type="email"
-                {...register("userEmail", { 
-                  required: "Email is required",
-                  pattern: { value: /^\S+@\S+$/i, message: "Invalid email" }
-                })}
-                className={inputClass('userEmail')}
-                placeholder="user@domain.com"
+                {...register("userEmail", { required: "Email is required" })}
+                className="w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                placeholder="user@example.com"
               />
-              {errors.userEmail && <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">⚠ {errors.userEmail.message}</p>}
+              {errors.userEmail && <p className="text-xs text-red-400 mt-1">{errors.userEmail.message}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-emerald-300/80 mb-1.5 uppercase tracking-wider">Facility Name</label>
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                Facility Name
+              </label>
               <input
                 type="text"
                 {...register("facilityName", { required: "Facility name is required" })}
-                className={inputClass('facilityName')}
-                placeholder="e.g. Room A"
+                className="w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+                placeholder="e.g. Auditorium A"
               />
-              {errors.facilityName && <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">⚠ {errors.facilityName.message}</p>}
+              {errors.facilityName && <p className="text-xs text-red-400 mt-1">{errors.facilityName.message}</p>}
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-emerald-300/80 mb-1.5 uppercase tracking-wider">Date</label>
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                Start Date / Time
+              </label>
               <input
-                type="date"
-                {...register("bookingDate", { required: "Required" })}
-                className={inputClass('bookingDate')}
+                type="datetime-local"
+                {...register("startAt", { required: "Required" })}
+                className="w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/50 transition-all [color-scheme:dark]"
               />
-              {errors.bookingDate && <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">⚠ {errors.bookingDate.message}</p>}
+              {errors.startAt && <p className="text-xs text-red-400 mt-1">{errors.startAt.message}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-emerald-300/80 mb-1.5 uppercase tracking-wider">Start Time</label>
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+                End Date / Time
+              </label>
               <input
-                type="time"
-                {...register("bookingTime", { required: "Required" })}
-                className={inputClass('bookingTime')}
+                type="datetime-local"
+                {...register("endAt", { required: "Required" })}
+                className="w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/50 transition-all [color-scheme:dark]"
               />
-              {errors.bookingTime && <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">⚠ {errors.bookingTime.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-emerald-300/80 mb-1.5 uppercase tracking-wider">Hours</label>
-              <input
-                type="number"
-                {...register("duration", { 
-                  required: "Required",
-                  min: { value: 1, message: "Min 1 hr" },
-                  max: { value: 12, message: "Max 12 hrs" }
-                })}
-                className={inputClass('duration')}
-                placeholder="2"
-              />
-              {errors.duration && <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">⚠ {errors.duration.message}</p>}
+              {errors.endAt && <p className="text-xs text-red-400 mt-1">{errors.endAt.message}</p>}
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-emerald-300/80 mb-1.5 uppercase tracking-wider">Booking Purpose</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+              Status
+            </label>
+            <select
+              {...register("status")}
+              className="w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/50 transition-all cursor-pointer"
+            >
+              <option value="PENDING" className="bg-[#0B1329]">PENDING</option>
+              <option value="CONFIRMED" className="bg-[#0B1329]">CONFIRMED</option>
+              <option value="CANCELLED" className="bg-[#0B1329]">CANCELLED</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+              Notes
+            </label>
             <input
               type="text"
-              {...register("purpose", { required: "Please specify the purpose" })}
-              className={inputClass('purpose')}
-              placeholder="e.g. Weekly team meeting"
+              {...register("notes")}
+              className="w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+              placeholder="e.g. Needs HDMI adapter and extra chairs"
             />
-            {errors.purpose && <p className="text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)]">⚠ {errors.purpose.message}</p>}
           </div>
 
           <button
             type="submit"
-            className="w-full py-2.5 rounded-lg font-semibold text-sm text-white transition-all duration-300
-              bg-gradient-to-r from-emerald-600 to-teal-600
-              hover:from-emerald-500 hover:to-teal-500
-              hover:shadow-[0_0_25px_rgba(16,185,129,0.4)]
-              active:scale-[0.98] cursor-pointer
-            "
-            style={{ boxShadow: '0 0 15px rgba(16, 185, 129, 0.25)' }}
+            className="w-full mt-2 py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-emerald-950/50 hover:shadow-emerald-500/20 active:scale-[0.99] cursor-pointer"
           >
             Save Booking
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
