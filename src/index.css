@@ -2,8 +2,160 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-slate-950 text-slate-200;
+@layer components {
+  /* Layout */
+  .cyber-page {
+    @apply max-w-xl mx-auto my-8 px-4;
+  }
+
+  /* Card shell */
+  .cyber-card {
+    @apply relative rounded-2xl bg-[#0B1329]/90 border border-slate-800/80 p-6 shadow-2xl backdrop-blur-xl overflow-hidden transition-all duration-500;
+  }
+
+  .cyber-card-error {
+    @apply bg-red-950/20 border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)];
+  }
+
+  /* Top accent bar */
+  .cyber-accent {
+    @apply absolute top-0 left-4 right-4 h-[2px] rounded-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent transition-colors duration-500;
+  }
+
+  .cyber-accent-purple {
+    @apply absolute top-0 left-4 right-4 h-[2px] rounded-full bg-gradient-to-r from-transparent via-purple-500 to-transparent transition-colors duration-500;
+  }
+
+  .cyber-accent-amber {
+    @apply absolute top-0 left-4 right-4 h-[2px] rounded-full bg-gradient-to-r from-transparent via-amber-500 to-transparent transition-colors duration-500;
+  }
+
+  .cyber-accent-emerald {
+    @apply absolute top-0 left-4 right-4 h-[2px] rounded-full bg-gradient-to-r from-transparent via-emerald-400 to-transparent transition-colors duration-500;
+  }
+
+  .cyber-accent-error {
+    @apply absolute top-0 left-4 right-4 h-[2px] rounded-full bg-gradient-to-r from-transparent via-red-500 to-transparent transition-colors duration-500;
+  }
+
+  .cyber-accent-glow-cyan {
+    box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+  }
+
+  .cyber-accent-glow-purple {
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+  }
+
+  .cyber-accent-glow-amber {
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+  }
+
+  .cyber-accent-glow-emerald {
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+  }
+
+  .cyber-accent-glow-error {
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+  }
+
+  /* Header */
+  .cyber-header {
+    @apply flex items-center gap-2.5 mb-5;
+  }
+
+  .cyber-title {
+    @apply font-bold text-lg text-slate-100 tracking-wide;
+  }
+
+  .cyber-icon-box {
+    @apply p-2 rounded-lg border;
+  }
+
+  .cyber-icon-box-purple {
+    @apply bg-purple-500/15 border-purple-500/30;
+  }
+
+  .cyber-icon-box-amber {
+    @apply bg-amber-500/15 border-amber-500/30;
+  }
+
+  .cyber-icon-box-cyan {
+    @apply bg-cyan-500/15 border-cyan-500/30;
+  }
+
+  .cyber-icon-box-emerald {
+    @apply bg-emerald-500/10 border-emerald-500/20;
+  }
+
+  .cyber-icon-purple {
+    @apply w-5 h-5 text-purple-400 drop-shadow-[0_0_6px_rgba(168,85,247,0.6)];
+  }
+
+  .cyber-icon-amber {
+    @apply w-5 h-5 text-amber-400 drop-shadow-[0_0_6px_rgba(245,158,11,0.6)];
+  }
+
+  .cyber-icon-cyan {
+    @apply w-5 h-5 text-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.6)];
+  }
+
+  .cyber-icon-emerald {
+    @apply w-5 h-5 text-emerald-400;
+  }
+
+  /* Form structure */
+  .cyber-form {
+    @apply space-y-4;
+  }
+
+  .cyber-grid-2 {
+    @apply grid grid-cols-2 gap-3;
+  }
+
+  /* Fields */
+  .cyber-label {
+    @apply block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5;
+  }
+
+  .cyber-label-hint {
+    @apply text-slate-500 lowercase normal-case text-[10px];
+  }
+
+  .cyber-input {
+    @apply w-full bg-[#070D1B] border border-slate-800/80 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/50 transition-all;
+  }
+
+  .cyber-input-error {
+    @apply border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)] focus:shadow-[0_0_15px_rgba(239,68,68,0.5)];
+  }
+
+  .cyber-input-datetime {
+    @apply [color-scheme:dark];
+  }
+
+  .cyber-error {
+    @apply text-red-400 text-xs mt-1 drop-shadow-[0_0_4px_rgba(239,68,68,0.4)];
+  }
+
+  /* Buttons */
+  .cyber-submit {
+    @apply w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+  }
+
+  .cyber-submit-purple {
+    @apply w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:shadow-[0_0_25px_rgba(168,85,247,0.4)] active:scale-[0.98];
+  }
+
+  .cyber-submit-amber {
+    @apply w-full py-3 font-semibold text-sm text-white rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] active:scale-[0.98];
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+  }
+
+  .cyber-submit-emerald {
+    @apply w-full py-3 font-semibold text-sm text-white rounded-xl transition-all cursor-pointer bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-lg shadow-emerald-950/50 hover:shadow-emerald-500/20 active:scale-[0.99];
+  }
+
+  .cyber-submit-loading {
+    @apply flex items-center justify-center gap-2;
   }
 }
